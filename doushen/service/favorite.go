@@ -5,7 +5,7 @@ import (
 	"github.com/simple-demo/dao"
 )
 
-// FavoriteAction 修改点赞状态
+// 函数的作用是修改点赞状态
 func FavoriteAction(token string, videoId int64, actionType int64) common.Response {
 	user, exist := UsersLoginInfo[token]
 	if exist {
@@ -21,7 +21,7 @@ func FavoriteAction(token string, videoId int64, actionType int64) common.Respon
 	}
 }
 
-// FavoriteList 获取点赞列表
+// 函数的作用是获取点赞列表
 func FavoriteList(token string) []common.Video {
 	user, exist := UsersLoginInfo[token]
 	if exist {

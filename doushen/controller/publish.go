@@ -14,7 +14,7 @@ type VideoListResponse struct {
 	VideoList       []common.Video `json:"video_list"` //视频列表
 }
 
-// 函数的作用是
+// 函数的作用是获取权限上传到公共目录
 func Publish(c *gin.Context) {
 	token := c.PostForm("token") //获得反应
 	title := c.PostForm("title") //获得标题

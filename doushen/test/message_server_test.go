@@ -3,11 +3,12 @@ package test
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/simple-demo/common"
 	"io"
 	"net"
 	"testing"
 	"time"
+
+	"github.com/simple-demo/common"
 )
 
 func TestMessageServer(t *testing.T) {
@@ -48,7 +49,7 @@ func readMessage(conn net.Conn) {
 
 		var event = common.MessagePushEvent{}
 		_ = json.Unmarshal(buf[:n], &event)
-		fmt.Printf("Read message：%+v\n", event)
+		fmt.Printf("Read message:%+v\n", event)
 	}
 }
 

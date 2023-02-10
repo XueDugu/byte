@@ -3,14 +3,16 @@ package service
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/simple-demo/common"
 	"io"
 	"net"
 	"sync"
+
+	"github.com/simple-demo/common"
 )
 
 var chatConnMap = sync.Map{}
 
+// 函数的作用是开启端口接受信息并上传
 func RunMessageServer() {
 	listen, err := net.Listen("tcp", "127.0.0.1:9090")
 	if err != nil {
@@ -29,6 +31,7 @@ func RunMessageServer() {
 	}
 }
 
+// 函数的作用是接收信息并上传
 func process(conn net.Conn) {
 	defer conn.Close()
 
@@ -45,7 +48,7 @@ func process(conn net.Conn) {
 
 		var event = common.MessageSendEvent{}
 		_ = json.Unmarshal(buf[:n], &event)
-		fmt.Printf("Receive Message：%+v\n", event)
+		fmt.Printf("Receive Message:%+v\n", event)
 
 		fromChatKey := fmt.Sprintf("%d_%d", event.UserId, event.ToUserId)
 		if len(event.MsgContent) == 0 {

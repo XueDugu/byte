@@ -11,6 +11,7 @@ type User struct {
 	Password string
 }
 
+// 函数的作用是显示所有用户
 func findAllUsers() {
 	var users []User
 	// 获取全部记录
@@ -21,6 +22,7 @@ func findAllUsers() {
 	println(result.Error)        // returns error
 }
 
+// 函数的作用是通过用户的ID找到用户
 func FindUserByID(id int64) (username string, err error) {
 	var users []User
 	db.Where([]int64{id}).Find(&users)
@@ -30,6 +32,7 @@ func FindUserByID(id int64) (username string, err error) {
 	return users[0].Name, nil
 }
 
+// 函数的作用是通过用户名和密码找到用户
 func FindUserByNameAndPassword(username string, password string) (ID int64, err error) {
 	var users []User
 	db.Where(&User{Name: username, Password: password}).Find(&users)
@@ -39,6 +42,7 @@ func FindUserByNameAndPassword(username string, password string) (ID int64, err 
 	return users[0].ID, nil
 }
 
+// 函数的作用是通过用户名找到用户
 func FindUserByName(username string) (ID int64, err error) {
 	var users []User
 	db.Where(&User{Name: username}).Find(&users)

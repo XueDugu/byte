@@ -7,6 +7,7 @@ import (
 
 var db *gorm.DB
 
+// 函数的作用是开启端口
 func Init_db() {
 	//dsn := "root:xxzj9911@tcp(127.0.0.1:3306)/douyin?charset=utf8mb4&parseTime=True&loc=Local"
 	dsn := "root:xxzj9911@tcp(40b1b5d14657.c.methodot.com:33177)/douyin?charset=utf8mb4&parseTime=True&loc=Local"

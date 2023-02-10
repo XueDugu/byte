@@ -29,6 +29,7 @@ type UserResponse struct {
 	User common.User `json:"user"`
 }
 
+// 函数的作用是注册用户
 func Register(username string, password string) UserLoginResponse {
 	if _, err := dao.FindUserByName(username); err != nil { // 用户名不能重复
 		ID, _ := dao.CreateUserByNameAndPassword(username, password)
@@ -50,6 +51,7 @@ func Register(username string, password string) UserLoginResponse {
 	}
 }
 
+// 函数的作用是登录用户
 func Login(username string, password string) UserLoginResponse {
 	if ID, err := dao.FindUserByNameAndPassword(username, password); err != nil {
 		return UserLoginResponse{Response: common.Response{StatusCode: 1, StatusMsg: "User doesn't exist"}}
@@ -70,6 +72,7 @@ func Login(username string, password string) UserLoginResponse {
 	}
 }
 
+// 函数的作用是获得用户信息
 func UserInfo(token string) UserResponse {
 	if user, exist := UsersLoginInfo[token]; exist {
 		return UserResponse{

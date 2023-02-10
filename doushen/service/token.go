@@ -2,8 +2,9 @@ package service
 
 import (
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
 )
 
 // 自定义令牌
@@ -19,7 +20,7 @@ func (m MyClaim) Valid() error {
 	return nil
 }
 
-// 创建token
+// 函数的作用是创建反应
 func CreateToken(userid int, username interface{}) (s string, err error) {
 	// Create the Claims
 	claims := MyClaim{

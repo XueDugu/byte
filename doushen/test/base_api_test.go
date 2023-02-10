@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// 函数的作用是
 func TestFeed(t *testing.T) {
 	e := newExpect(t)
 
@@ -24,6 +25,7 @@ func TestFeed(t *testing.T) {
 	}
 }
 
+// 函数的作用是
 func TestUserAction(t *testing.T) {
 	e := newExpect(t)
 
@@ -63,6 +65,7 @@ func TestUserAction(t *testing.T) {
 	userInfo.Value("name").String().Length().Gt(0)
 }
 
+// 函数的作用是
 func TestPublish(t *testing.T) {
 	e := newExpect(t)
 

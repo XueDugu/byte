@@ -5,6 +5,7 @@ import (
 	"github.com/simple-demo/controller"
 )
 
+// 函数的作用是初始化信息交互方式
 func initRouter(r *gin.Engine) {
 	// public directory is used to serve static resources
 	r.Static("/static", "./public")

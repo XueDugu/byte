@@ -2,12 +2,13 @@ package service
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/simple-demo/common"
 	"github.com/simple-demo/dao"
-	"time"
 )
 
-// Feed same demo video list for every request
+// 函数的作用是通过创建时间找到所有作品
 func Feed(t time.Time, token string) ([]common.Video, time.Time) {
 	videos := dao.FindVideosByCreatedTime(t)
 	if len(videos) < 1 {
@@ -20,6 +21,7 @@ func Feed(t time.Time, token string) ([]common.Video, time.Time) {
 	return convertVideos(videos, userID), videos[len(videos)-1].CreatedAt
 }
 
+// 函数的作用是找到视频发布者的所有作品
 func convertVideos(videos []dao.Video, userID int64) []common.Video {
 	var res []common.Video
 	for _, video := range videos {
