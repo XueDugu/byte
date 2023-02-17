@@ -2,7 +2,7 @@
 
 the way to use it
 
-Firstly,clone it down
+Firstly,clone https://github.com/XueDugu/byte/tree/finalfinal/we
 
 Secondly,git bash
 
