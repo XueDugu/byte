@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	dao.Init_db()
+	dao.InitDb()
 
 	go service.RunMessageServer()
 

@@ -2,13 +2,12 @@ package service
 
 import (
 	"fmt"
-	"time"
-
 	"github.com/simple-demo/common"
 	"github.com/simple-demo/dao"
+	"time"
 )
 
-// 函数的作用是通过创建时间找到所有作品
+// Feed 查询最新的30个视频
 func Feed(t time.Time, token string) ([]common.Video, time.Time) {
 	videos := dao.FindVideosByCreatedTime(t)
 	if len(videos) < 1 {
@@ -21,7 +20,7 @@ func Feed(t time.Time, token string) ([]common.Video, time.Time) {
 	return convertVideos(videos, userID), videos[len(videos)-1].CreatedAt
 }
 
-// 函数的作用是找到视频发布者的所有作品
+// 格式转换，把数据库得到的Video格式转换为common.Video格式
 func convertVideos(videos []dao.Video, userID int64) []common.Video {
 	var res []common.Video
 	for _, video := range videos {
@@ -34,14 +33,23 @@ func convertVideos(videos []dao.Video, userID int64) []common.Video {
 					isFavorite = true
 				}
 			}
+			follow := dao.FindRelationsByFanID(video.Author)
+			fans := dao.FindRelationsByUserID(video.Author)
+			isFollow := false
+			for _, fan := range fans {
+				if fan.FanId == userID {
+					isFollow = true
+					break
+				}
+			}
 			res = append(res, common.Video{
 				Id: video.ID,
 				Author: common.User{
 					Id:            video.Author,
 					Name:          name,
-					FollowCount:   0,
-					FollowerCount: 0,
-					IsFollow:      false,
+					FollowCount:   int64(len(follow)),
+					FollowerCount: int64(len(fans)),
+					IsFollow:      isFollow,
 				},
 				PlayUrl:       video.PlayUrl,
 				CoverUrl:      video.CoverUrl,

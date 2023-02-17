@@ -1,55 +1,93 @@
 package controller
 
 import (
-	"net/http"
-
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/simple-demo/common"
 	"github.com/simple-demo/service"
+	"net/http"
+	"strconv"
 )
 
 type UserListResponse struct {
-	common.Response               //用户回复列表
-	UserList        []common.User `json:"user_list"` //用户列表
+	common.Response
+	UserList []common.User `json:"user_list"`
 }
 
-// 函数的作用是判断用户是否注册成功
-func RelationAction(c *gin.Context) {
-	token := c.Query("token") //接受字符串形式的反应
+type FriendListResponse struct {
+	common.Response
+	UserList []common.FriendUser `json:"user_list"`
+}
 
-	if _, exist := service.UsersLoginInfo[token]; exist {
-		c.JSON(http.StatusOK, common.Response{StatusCode: Success})
+// RelationAction 关注或取关
+func RelationAction(c *gin.Context) {
+	token := c.Query("token")
+	toUserId := c.Query("to_user_id")
+	actionType := c.Query("action_type")
+	userID, err := strconv.ParseInt(toUserId, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusOK, common.Response{StatusCode: 2, StatusMsg: "RelationAction ParseInt ID Error"})
+		return
+	}
+	action, err := strconv.ParseInt(actionType, 10, 32)
+	if err != nil {
+		c.JSON(http.StatusOK, common.Response{StatusCode: 2, StatusMsg: "RelationAction ParseInt action Error"})
+		return
+	}
+
+	if user, exist := service.UsersLoginInfo[token]; exist {
+		err := service.RelationAction(user, userID, int8(action))
+		if err != nil {
+			c.JSON(http.StatusOK, common.Response{StatusCode: 2, StatusMsg: fmt.Sprint(err)})
+		} else {
+			c.JSON(http.StatusOK, common.Response{StatusCode: 0})
+		}
 	} else {
-		c.JSON(http.StatusOK, common.Response{StatusCode: UserDoesNotExist, StatusMsg: "User doesn't exist"}) //错误处理用户注册错误
+		c.JSON(http.StatusOK, common.Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
 	}
 }
 
-// 函数的作用是查看自己关注的人的列表
+// FollowList 查询关注列表
 func FollowList(c *gin.Context) {
-	c.JSON(http.StatusOK, UserListResponse{ //JSON序列化关注列表
-		Response: common.Response{
-			StatusCode: 0,
-		},
-		UserList: []common.User{DemoUser},
-	})
+	token := c.Query("token")
+	if user, exist := service.UsersLoginInfo[token]; exist {
+		c.JSON(http.StatusOK, UserListResponse{
+			Response: common.Response{
+				StatusCode: 0,
+			},
+			UserList: service.FollowList(user),
+		})
+	} else {
+		c.JSON(http.StatusOK, common.Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
+	}
 }
 
-// 函数的作用是查看关注自己的人的列表
+// FollowerList 查询粉丝列表
 func FollowerList(c *gin.Context) {
-	c.JSON(http.StatusOK, UserListResponse{ //JSON序列化关注他的人
-		Response: common.Response{
-			StatusCode: Success,
-		},
-		UserList: []common.User{DemoUser},
-	})
+	token := c.Query("token")
+	if user, exist := service.UsersLoginInfo[token]; exist {
+		c.JSON(http.StatusOK, UserListResponse{
+			Response: common.Response{
+				StatusCode: 0,
+			},
+			UserList: service.FollowerList(user),
+		})
+	} else {
+		c.JSON(http.StatusOK, common.Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
+	}
 }
 
-// 函数的作用是查看好友列表
+// FriendList TODO 暂时实现为粉丝列表
 func FriendList(c *gin.Context) {
-	c.JSON(http.StatusOK, UserListResponse{ //JSON序列化用户好友列表
-		Response: common.Response{
-			StatusCode: Success,
-		},
-		UserList: []common.User{DemoUser},
-	})
+	token := c.Query("token")
+	if user, exist := service.UsersLoginInfo[token]; exist {
+		c.JSON(http.StatusOK, FriendListResponse{
+			Response: common.Response{
+				StatusCode: 0,
+			},
+			UserList: service.FriendList(user),
+		})
+	} else {
+		c.JSON(http.StatusOK, common.Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
+	}
 }

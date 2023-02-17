@@ -1,0 +1,3 @@
+INSERT INTO douyin.comments (id, user_id, video_id, text, created_at, deleted_at) VALUES (1, 1, 1, 'test ljp', '2023-01-27 15:01:24', '2023-01-27 15:02:01');
+INSERT INTO douyin.comments (id, user_id, video_id, text, created_at, deleted_at) VALUES (2, 1, 2, '测试评论1', '2023-01-27 15:35:31', null);
+INSERT INTO douyin.comments (id, user_id, video_id, text, created_at, deleted_at) VALUES (3, 1, 1, '666', '2023-01-27 15:42:51', null);

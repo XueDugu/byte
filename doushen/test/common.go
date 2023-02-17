@@ -1,17 +1,15 @@
 package test
 
 import (
+	"github.com/gavv/httpexpect/v2"
 	"net/http"
 	"testing"
-
-	"github.com/gavv/httpexpect/v2"
 )
 
 var serverAddr = "http://localhost:8080"
 var testUserA = "douyinTestUserA"
 var testUserB = "douyinTestUserB"
 
-// 函数的作用是获得一个配置好的实例
 func newExpect(t *testing.T) *httpexpect.Expect {
 	return httpexpect.WithConfig(httpexpect.Config{
 		Client:   http.DefaultClient,
@@ -23,7 +21,6 @@ func newExpect(t *testing.T) *httpexpect.Expect {
 	})
 }
 
-// 函数的作用是获得测试用户的反应
 func getTestUserToken(user string, e *httpexpect.Expect) (int, string) {
 	registerResp := e.POST("/douyin/user/register/").
 		WithQuery("username", user).WithQuery("password", user).

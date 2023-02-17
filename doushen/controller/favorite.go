@@ -1,40 +1,39 @@
 package controller
 
 import (
-	"net/http"
-	"strconv"
-
 	"github.com/gin-gonic/gin"
 	"github.com/simple-demo/common"
 	"github.com/simple-demo/service"
+	"net/http"
+	"strconv"
 )
 
-// 函数的作用是判断有无点赞操作
+// FavoriteAction 点赞或取消点赞
 func FavoriteAction(c *gin.Context) {
-	token := c.Query("token")                                 //接受字符串形式的反应
-	videoID := c.Query("video_id")                            //接受字符串形式的视频发布者的ID
-	actionType := c.Query("action_type")                      //获得字符串形式的反应状态
-	ID, err := strconv.ParseInt(videoID, decimalism, bitSize) //获得数字形式的视频发布者的ID
-	if err != nil {                                           //错误处理转换ID错误
-		c.JSON(http.StatusOK, common.Response{StatusCode: FavoriteActionParseIntIDError, StatusMsg: "FavoriteAction ParseInt ID Error"})
+	token := c.Query("token")
+	videoID := c.Query("video_id")
+	actionType := c.Query("action_type")
+	ID, err := strconv.ParseInt(videoID, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusOK, common.Response{StatusCode: 2, StatusMsg: "FavoriteAction ParseInt ID Error"})
 		return
 	}
-	action, err := strconv.ParseInt(actionType, decimalism, bitSize) //获得数字形式的反应状态
+	action, err := strconv.ParseInt(actionType, 10, 64)
 	if err != nil {
-		c.JSON(http.StatusOK, common.Response{StatusCode: FavoriteActionParseIntIDError, StatusMsg: "FavoriteAction ParseInt action Error"})
+		c.JSON(http.StatusOK, common.Response{StatusCode: 2, StatusMsg: "FavoriteAction ParseInt action Error"})
 		return
 	}
 
 	c.JSON(http.StatusOK, service.FavoriteAction(token, ID, action))
 }
 
-// 函数的作用是获取点赞列表
+// FavoriteList 获取点赞列表
 func FavoriteList(c *gin.Context) {
-	token := c.Query("token") //接受字符串形式的反应
+	token := c.Query("token")
 	if _, exist := service.UsersLoginInfo[token]; !exist {
 		c.JSON(http.StatusOK, VideoListResponse{
 			Response: common.Response{
-				StatusCode: UserDoesNotExist,
+				StatusCode: 1,
 				StatusMsg:  "User doesn't exist",
 			},
 			VideoList: []common.Video{},
@@ -42,9 +41,9 @@ func FavoriteList(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusOK, VideoListResponse{
 			Response: common.Response{
-				StatusCode: Success,
+				StatusCode: 0,
 			},
-			VideoList: service.FavoriteList(token), //接受视频点赞列表
+			VideoList: service.FavoriteList(token),
 		})
 	}
 }

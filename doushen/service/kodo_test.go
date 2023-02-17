@@ -2,7 +2,6 @@ package service
 
 import "testing"
 
-//函数的作用是测试上传功能
 func TestUpload(t *testing.T) {
 	filename := "test.txt"
 	data := []byte("hello, this is qiniu cloud")
@@ -14,7 +13,6 @@ func TestUpload(t *testing.T) {
 	println(key, hash, ID)
 }
 
-//函数的作用是测试获取网址功能
 func TestGetPublicURL(t *testing.T) {
 	filename := "test.txt"
 	GetPublicURL(filename)

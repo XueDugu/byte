@@ -3,16 +3,15 @@ package service
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/simple-demo/common"
+	"github.com/simple-demo/dao"
 	"io"
 	"net"
 	"sync"
-
-	"github.com/simple-demo/common"
 )
 
 var chatConnMap = sync.Map{}
 
-// 函数的作用是开启端口接受信息并上传
 func RunMessageServer() {
 	listen, err := net.Listen("tcp", "127.0.0.1:9090")
 	if err != nil {
@@ -31,7 +30,6 @@ func RunMessageServer() {
 	}
 }
 
-// 函数的作用是接收信息并上传
 func process(conn net.Conn) {
 	defer conn.Close()
 
@@ -48,7 +46,7 @@ func process(conn net.Conn) {
 
 		var event = common.MessageSendEvent{}
 		_ = json.Unmarshal(buf[:n], &event)
-		fmt.Printf("Receive Message:%+v\n", event)
+		fmt.Printf("Receive Message：%+v\n", event)
 
 		fromChatKey := fmt.Sprintf("%d_%d", event.UserId, event.ToUserId)
 		if len(event.MsgContent) == 0 {
@@ -73,4 +71,27 @@ func process(conn net.Conn) {
 			fmt.Printf("Push message failed: %v\n", err)
 		}
 	}
+}
+
+// MessageAction no practical effect, just check if token is valid
+func MessageAction(fromID, toID int64, content string) error {
+	_, _, err := dao.InsertMessage(fromID, toID, content)
+	return err
+}
+
+// MessageChat all users have same follow list
+func MessageChat(fromID, toID int64) []common.Message {
+	messages := dao.FindMessageByTwoID(fromID, toID)
+	res := make([]common.Message, len(messages))
+	for _, message := range messages {
+		println(message.Content)
+		res = append(res, common.Message{
+			Id:         message.ID,
+			ToUserId:   message.ToId,
+			FromUserId: message.FromId,
+			Content:    message.Content,
+			CreateTime: message.CreatedAt.Unix(),
+		})
+	}
+	return res
 }

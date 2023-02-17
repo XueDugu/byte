@@ -1,0 +1,2 @@
+INSERT INTO douyin.videos (id, title, author, play_url, cover_url, created_at) VALUES (1, 'bear', 1, 'https://www.w3schools.com/html/movie.mp4', 'https://cdn.pixabay.com/photo/2016/03/27/18/10/bear-1283347_1280.jpg', '2023-01-26 21:51:48');
+INSERT INTO douyin.videos (id, title, author, play_url, cover_url, created_at) VALUES (2, 'test', 1, 'http://rp3814hyw.bkt.clouddn.com/VIDEO_20230126_220826947.mp4', 'https://cdn.pixabay.com/photo/2016/03/27/18/10/bear-1283347_1280.jpg', '2023-01-26 22:14:00');
