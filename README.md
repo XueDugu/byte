@@ -1,6 +1,6 @@
-# byte
+#byte
 
-the way to use it
+**The way to use it**
 
 Firstly,clone https://github.com/XueDugu/byte/tree/finalfinal/we
 
