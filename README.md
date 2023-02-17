@@ -1,5 +1,3 @@
-#byte
-
 **The way to use it**
 
 Firstly,clone https://github.com/XueDugu/byte/tree/finalfinal/we
